@@ -30,9 +30,8 @@ def toHumanString = { Long bytes ->
         return Math.round((bytes / base**i) * 10**decimals) / 10**decimals + prefix[i]
 }
 
-MAILER_HOST = "vistsmtp.visteon.com"  // "smtp-relay.gmail.com"
-//RECIPIENT_EMAIL = "bpalepu1@visteon.com,vvadlamu@visteon.com"
-Sender_MAIL = "Artifactory - Support<artifactory@visteon.com>"
+MAILER_HOST = "your-smtp-mailer"  // "smtp-relay.gmail.com"
+Sender_MAIL = "Artifactory - Support<artifactory@example.com>" // from email
 props = new Properties()
 
 //@Grab(group = 'com.sun.mail', module = 'javax.mail', version = '1.6.0')
@@ -46,16 +45,16 @@ def runScript(percent,projectContact,quotaInHR,currentSizeInHR,repoKey) {
     MimeMessage message = new MimeMessage(session)
     message.setFrom(new InternetAddress(Sender_MAIL))
     message.addRecipients(Message.RecipientType.TO, projectContact);
-    message.addRecipients(Message.RecipientType.CC, "artquota@visteon.com")
+    message.addRecipients(Message.RecipientType.CC, "artquota@example.com") // default CC
     message.setSubject("Repository Quota Warning | ${repoKey}")
     def myMessage = """Hi Team,<br><br> <h3>Your <span style="color: #ff0000">${repoKey}</span> Repository Current usage is <span style="color: #ff0000">${percent}%</span></h3>
 
 <p>
-Repo URL = <a href="https://jfrog.bangalore.visteon.com/ui/#/artifacts/browse/tree/General/${repoKey}">https://jfrog.bangalore.visteon.com/ui/#/artifacts/browse/tree/General/${repoKey}</a><br><br>
+Repo URL = <a href="https://example.com/ui/#/artifacts/browse/tree/General/${repoKey}">https://example.com/ui/#/artifacts/browse/tree/General/${repoKey}</a><br><br>
 Total Quota = ${quotaInHR}<br><br>
 Current Used = ${currentSizeInHR}<br><br>
 
-Please plan for the Housekeeping or reply to this same Mail(<a href="mailto:artifactory@visteon.com">artifactory@visteon.com</a>) for more info and hassle free uploads.<br><br>
+Please plan for the Housekeeping or reply to this same Mail(<a href="mailto:artifactory@example.com">artifactory@example.com</a>) for more info and hassle free uploads.<br><br>
 
 <span style="font-size:15px;"><b>Note:</b></span> You are receiving this mail because you were mentioned as a Repository Contact in the Artifactory for this Repository. If you are not aware of this or want to unsubscribe from the Mailing List please reach out to the Artifactory Administrator.
 </p>"""
@@ -101,7 +100,7 @@ storage {
         if (properties.containsKey("repository.contact")) {
         projectContact = properties.getFirst("repository.contact")
         }else{
-        projectContact = "vvadlamu@visteon.com,vreddy10@visteon.com,sgrace1@visteon.com"
+        projectContact = "john@example.com,deo@example.com,steve@example.com"
         }
          if (percent>85) {
         log.warn("used is: ${percent} ")
